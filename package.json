@@ -1,0 +1,1 @@
+{"name":"answer-car-wash","private":true,"scripts":{"start":"node server.js"},"engines":{"node":">=18"}}
