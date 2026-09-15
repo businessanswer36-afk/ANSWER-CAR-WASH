@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Answer Car Wash</title>
+
+<style>
+body{font-family:Arial;margin:0;background:#f3f5f7}
+header{background:#123b68;color:#fff;padding:18px}
+main{max-width:1000px;margin:auto;padding:15px}
+.card{background:#fff;margin:12px 0;padding:18px;border-radius:12px;box-shadow:0 2px 8px #0001}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.stat{font-size:28px;font-weight:bold}
+input,button{padding:11px;margin:5px;border-radius:7px;border:1px solid #ccc}
+button{background:#123b68;color:#fff}
+.hide{display:none}
+</style>
+
+<header>
+<h1>ANSWER CAR WASH</h1>
+</header>
+
+<main>
+
+<div id="login" class="card">
+<h2>Connexion</h2>
+<input id="u" placeholder="Utilisateur">
+<input id="p" type="password" placeholder="Mot de passe">
+<button onclick="go()">Se connecter</button>
+<p id="m"></p>
+</div>
+
+<div id="app" class="hide">
+
+<div class="card">
+<button onclick="location.reload()">Déconnexion</button>
+</div>
+
+<div class="grid">
+
+<div class="card">
+Clients
+<div class="stat" id="n1">0</div>
+</div>
+
+<div class="card">
+Véhicules
+<div class="stat" id="n2">0</div>
+</div>
+
+<div class="card">
+Lavages
+<div class="stat" id="n3">0</div>
+</div>
+
+<div class="card">
+Recettes
+<div class="stat" id="n4">0</div>
+</div>
+
+</div>
+
+<div class="card">
+<h2>Nouveau lavage</h2>
+
+<input id="c" placeholder="Client">
+<input id="v" placeholder="Immatriculation">
+<input id="s" placeholder="Service">
+<input id="a" type="number" placeholder="Montant">
+
+<button onclick="add()">Enregistrer</button>
+</div>
+
+<div class="card" id="st">
+Connexion à la base...
+</div>
+
+</div>
+</main>
+
+<script>
+
+function go(){
+if(u.value==="admin"&&p.value==="1234"){
+login.classList.add("hide");
+app.classList.remove("hide");
+load()
+}else{
+m.textContent="Identifiants incorrects"
+}
+}
+
+async function post(t,o){
+return fetch("/api/"+t,{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify(o)
+})
+}
+
+async function load(){
+try{
+let d=await (await fetch("/api/data")).json();
+
+n1.textContent=d.clients.length;
+n2.textContent=d.vehicles.length;
+n3.textContent=d.washes.length;
+
+n4.textContent=d.cash
+.filter(x=>x.type==="income")
+.reduce((q,x)=>q+Number(x.amount||0),0);
+
+st.textContent="Base de données connectée ✓"
+
+}catch(e){
+st.textContent="Erreur: "+e.message
+}
+}
+
+async function add(){
+
+if(!c.value||!v.value||!a.value)
+return alert("Remplis client, immatriculation et montant");
+
+await post("clients",{name:c.value});
+
+await post("vehicles",{
+plate:v.value,
+client_name:c.value
+});
+
+await post("washes",{
+client_name:c.value,
+plate:v.value,
+service:s.value,
+amount:Number(a.value)
+});
+
+await post("cash",{
+type:"income",
+amount:Number(a.value),
+description:"Lavage "+v.value
+});
+
+c.value="";
+v.value="";
+s.value="";
+a.value="";
+
+load()
+}
+
+</script>
+
+</html>
