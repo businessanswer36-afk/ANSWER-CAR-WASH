@@ -1,47 +1,138 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Answer Car Wash</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#182337}.login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#062b63,#1498e5);padding:20px}.loginbox{width:min(430px,100%);background:#fff;border-radius:22px;padding:32px;text-align:center;box-shadow:0 20px 60px #001a4433}.logo{width:70px;height:70px;border-radius:20px;background:#eaf3ff;display:grid;place-items:center;margin:auto;color:#1268d8;font-weight:bold;font-size:22px}.loginbox h1{font-size:27px}.loginbox p{color:#8491a5}.loginbox input{width:100%;padding:14px;border:1px solid #e5eaf2;border-radius:10px;margin:7px 0}.loginbox button,.primary{width:100%;padding:13px;border:0;border-radius:10px;background:#1268d8;color:white;font-weight:bold}.app{display:none;min-height:100vh}.sidebar{position:fixed;left:0;top:0;bottom:0;width:245px;background:#0b2140;color:#fff;padding:20px 14px}.brand{display:flex;gap:10px;align-items:center;padding-bottom:20px;border-bottom:1px solid #ffffff22}.brand .logo{width:48px;height:48px;margin:0;background:#fff}.brand small{display:block;color:#9fb5d5}.nav{margin-top:15px}.nav button{width:100%;text-align:left;background:transparent;color:#cbd7e8;border:0;padding:12px;border-radius:9px}.nav button.active,.nav button:hover{background:#ffffff18;color:#fff}.main{margin-left:245px}.top{height:72px;background:#fff;border-bottom:1px solid #e5eaf2;display:flex;align-items:center;justify-content:space-between;padding:0 25px;position:sticky;top:0}.userarea{display:flex;align-items:center;gap:12px}.car-mini{width:82px;height:42px}.logout{border:1px solid #dfe5ee;background:#fff;border-radius:9px;padding:9px 13px}.content{padding:25px}.hero{background:linear-gradient(120deg,#0b4d9e,#1798e6);color:#fff;border-radius:18px;padding:25px;display:flex;justify-content:space-between;align-items:center}.hero h1{margin:0 0 8px}.hero-car{width:220px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:18px}.card{background:#fff;border:1px solid #e5eaf2;border-radius:15px;padding:18px;box-shadow:0 5px 18px #183b6810}.stat b{font-size:27px;display:block;margin-top:8px}.section{display:none}.section.active{display:block}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.field label{display:block;font-size:13px;font-weight:bold;margin-bottom:6px}.field input,.field select{width:100%;padding:12px;border:1px solid #e5eaf2;border-radius:9px;background:#fff}.actions{margin-top:16px;display:flex;gap:10px}.actions .primary{width:auto}.secondary{background:#fff;border:1px solid #dfe5ee;padding:12px 18px;border-radius:9px}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:12px;text-align:left;border-bottom:1px solid #e5eaf2}.modal{display:none;position:fixed;inset:0;background:#071b3388;align-items:center;justify-content:center;padding:20px}.modalbox{background:#fff;border-radius:16px;width:min(520px,100%);padding:25px}.invoice-row{display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #eef1f5}@media(max-width:800px){.sidebar{width:65px}.brand div:not(.logo),.nav button{font-size:0}.nav button:first-letter{font-size:18px}.main{margin-left:65px}.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.grid,.formgrid{grid-template-columns:1fr}.hero-car{display:none}.content{padding:14px}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f7fb;color:#172337}
+button,input,select{font:inherit}.login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#071b3a,#0878d1)}
+.loginbox{width:min(430px,92%);background:#fff;border-radius:24px;padding:32px;box-shadow:0 20px 60px #0005;text-align:center}
+.logo{width:74px;height:74px;border-radius:20px;background:#e8f4ff;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:30px}
+.loginbox h1{margin:8px 0;color:#123d70}.muted{color:#7b8794}.field{margin:12px 0}.field input,.field select{width:100%;padding:14px;border:1px solid #d8e1ea;border-radius:10px;outline:0}.primary{width:100%;padding:14px;border:0;border-radius:10px;background:#168be0;color:white;font-weight:bold;cursor:pointer}
+.app{display:none;min-height:100vh}.sidebar{position:fixed;left:0;top:0;bottom:0;width:245px;background:#09274d;color:#fff;padding:22px 14px}.brand{font-size:20px;font-weight:800;margin:8px 10px 24px}.brand small{display:block;font-size:11px;color:#9fc4e8;margin-top:5px}
+.nav button{width:100%;text-align:left;background:transparent;color:#dcecff;border:0;padding:12px 14px;border-radius:10px;margin:2px 0;cursor:pointer}.nav button:hover,.nav button.active{background:#126db7;color:#fff}.logout{position:absolute;bottom:20px;left:14px;width:calc(100% - 28px);padding:11px;border:1px solid #4e79a2;background:transparent;color:#fff;border-radius:10px;cursor:pointer}
+.main{margin-left:245px;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.car{font-size:54px}.hero{background:linear-gradient(120deg,#fff,#e7f4ff);border-radius:18px;padding:24px;display:flex;justify-content:space-between;align-items:center}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}.card{background:#fff;border-radius:15px;padding:18px;box-shadow:0 4px 18px #17385c12}.num{font-size:28px;font-weight:800;margin-top:8px}.section{display:none}.section.active{display:block}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden}.table th,.table td{padding:12px;border-bottom:1px solid #edf1f5;text-align:left}.form{background:#fff;padding:20px;border-radius:15px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}.actions{display:flex;gap:10px;margin-top:14px}.secondary{padding:12px 16px;border:1px solid #d5dee8;background:#fff;border-radius:9px;cursor:pointer}
+@media(max-width:800px){.sidebar{position:relative;width:100%;height:auto}.logout{position:static;margin-top:10px}.main{margin-left:0}.cards{grid-template-columns:1fr 1fr}.grid,.formgrid{grid-template-columns:1fr}.full{grid-column:auto}}
 </style>
 </head>
 <body>
-<div class="login" id="login"><div class="loginbox"><div class="logo">ACW</div><h1>ANSWER CAR WASH</h1><p>Gestion professionnelle de votre station de lavage</p><input id="u" value="admin" placeholder="Nom d'utilisateur"><input id="p" type="password" value="1234" placeholder="Mot de passe"><button onclick="doLogin()">Se connecter</button><div id="msg"></div></div></div>
-<div class="app" id="app">
-<aside class="sidebar"><div class="brand"><div class="logo">ACW</div><div><b>ANSWER CAR WASH</b><small>Gestion professionnelle</small></div></div>
-<nav class="nav">
-<button class="active" onclick="show('dashboard',this)">ðŸ  Tableau de bord</button>
-<button onclick="show('wash',this)">ðŸš¿ Nouveau lavage</button><button onclick="show('clients',this)">ðŸ‘¤ Clients</button><button onclick="show('vehicles',this)">ðŸš— VÃ©hicules</button><button onclick="show('invoices',this)">ðŸ§¾ Factures</button><button onclick="show('cash',this)">ðŸ’° Caisse</button><button onclick="show('employees',this)">ðŸ‘¨â€ðŸ”§ EmployÃ©s / Laveurs</button><button onclick="show('reports',this)">ðŸ“Š Rapports</button><button onclick="show('loyalty',this)">â­ FidÃ©litÃ©</button><button onclick="show('expenses',this)">ðŸ’³ DÃ©penses</button><button onclick="show('services',this)">âš™ï¸ Services & tarifs</button>
-</nav></aside>
-<main class="main"><header class="top"><h2 id="title">Tableau de bord</h2><div class="userarea">
-<svg class="car-mini" viewBox="0 0 160 80" aria-label="Voiture"><path d="M22 50L35 28Q39 21 51 20h54q11 1 18 11l16 17q5 5 2 13H20q-5-6 2-11Z" fill="#1268d8"/><path d="M48 24h53q10 1 16 10l5 8H39l5-12q1-5 4-6Z" fill="#bfe5ff"/><circle cx="43" cy="61" r="11" fill="#17243a"/><circle cx="119" cy="61" r="11" fill="#17243a"/></svg>
-<span>Admin</span><button class="logout" onclick="logout()">DÃ©connexion</button></div></header>
-<div class="content">
-<section id="dashboard" class="section active"><div class="hero"><div><h1>Bienvenue sur Answer Car Wash</h1><p>GÃ©rez vos lavages, clients, vÃ©hicules, caisse et rapports.</p></div><svg class="hero-car" viewBox="0 0 320 130"><path d="M35 80L60 42Q67 31 88 29h126q21 2 38 19l34 28q10 8 6 25H31q-7-10 4-21Z" fill="#fff"/><path d="M83 35h124q18 1 32 16l11 13H69l9-20q2-7 5-9Z" fill="#9dd7ff"/><circle cx="82" cy="101" r="22" fill="#15243b"/><circle cx="235" cy="101" r="22" fill="#15243b"/></svg></div><div class="grid"><div class="card stat">ðŸ‘¤ Clients<b id="sc">0</b></div><div class="card stat">ðŸš— VÃ©hicules<b id="sv">0</b></div><div class="card stat">ðŸš¿ Lavages<b id="sw">0</b></div><div class="card stat">ðŸ’° Recettes<b id="sr">0 FCFA</b></div></div></section>
-<section id="wash" class="section"><div class="card"><h2>Nouveau lavage</h2><div class="formgrid"><div class="field"><label>Nom du client *</label><input id="cn"></div><div class="field"><label>TÃ©lÃ©phone</label><input id="ph"></div><div class="field"><label>Immatriculation *</label><input id="pl"></div><div class="field"><label>Type de vÃ©hicule</label><select id="vt"><option>Berline</option><option>4x4</option><option>Pickup</option><option>Taxi</option><option>Bus</option><option>Camion</option></select></div><div class="field"><label>Service</label><select id="se"><option>Lavage complet</option><option>Lavage extÃ©rieur</option><option>Lavage intÃ©rieur</option><option>Nettoyage premium</option></select></div><div class="field"><label>Laveur</label><select id="wa"><option>Jean</option><option>Paul</option><option>Michel</option></select></div><div class="field"><label>Montant FCFA *</label><input id="am" type="number" value="5000"></div><div class="field"><label>Paiement</label><select id="pa"><option>EspÃ¨ces</option><option>MTN Money</option><option>Airtel Money</option></select></div></div><div class="actions"><button class="primary" onclick="saveWash()">ðŸš¿ Enregistrer et prÃ©parer la facture</button><button class="secondary" onclick="clearForm()">Effacer</button></div><p id="wm"></p></div></section>
-<section id="clients" class="section"><div class="card"><h2>Clients</h2><table class="table"><tbody id="cb"></tbody></table></div></section>
-<section id="vehicles" class="section"><div class="card"><h2>VÃ©hicules</h2><table class="table"><tbody id="vb"></tbody></table></div></section>
-<section id="invoices" class="section"><div class="card"><h2>Factures</h2><div id="ib"></div></div></section>
-<section id="cash" class="section"><div class="card"><h2>Caisse</h2><h2 id="cashrev">0 FCFA</h2></div></section>
-<section id="employees" class="section"><div class="card"><h2>EmployÃ©s / Laveurs</h2><table class="table"><tr><th>Nom</th><th>Fonction</th><th>Statut</th></tr><tr><td>Jean</td><td>Laveur</td><td>Actif</td></tr><tr><td>Paul</td><td>Laveur</td><td>Actif</td></tr><tr><td>Michel</td><td>Laveur</td><td>Actif</td></tr></table></div></section>
-<section id="reports" class="section"><div class="card"><h2>Rapports</h2><div id="rep"></div></div></section>
-<section id="loyalty" class="section"><div class="card"><h2>FidÃ©litÃ©</h2><div id="loy"></div></div></section>
-<section id="expenses" class="section"><div class="card"><h2>DÃ©penses</h2><p>Gestion des dÃ©penses de la station.</p></div></section>
-<section id="services" class="section"><div class="card"><h2>Services & tarifs</h2><table class="table"><tr><th>Service</th><th>Tarif</th></tr><tr><td>Lavage complet</td><td>5 000 FCFA</td></tr><tr><td>Lavage extÃ©rieur</td><td>3 000 FCFA</td></tr><tr><td>Lavage intÃ©rieur</td><td>3 000 FCFA</td></tr><tr><td>Nettoyage premium</td><td>10 000 FCFA</td></tr></table></div></section>
-</div></main></div>
-<div class="modal" id="modal"><div class="modalbox"><h2>ðŸ§¾ Facture</h2><div id="invoice"></div><div class="actions"><button class="primary" onclick="window.print()">Imprimer</button><button class="secondary" onclick="modal.style.display='none'">Fermer</button></div></div></div>
+
+<div id="login" class="login">
+  <div class="loginbox">
+    <div class="logo">ðŸš¿</div>
+    <h1>ANSWER CAR WASH</h1>
+    <p class="muted">Gestion professionnelle de votre station de lavage</p>
+    <div class="field"><input id="user" placeholder="Nom d'utilisateur" value="admin"></div>
+    <div class="field"><input id="pass" type="password" placeholder="Mot de passe"></div>
+    <button class="primary" id="loginBtn" type="button">Se connecter</button>
+    <p id="loginMsg" style="color:#d33"></p>
+  </div>
+</div>
+
+<div id="app" class="app">
+<aside class="sidebar">
+  <div class="brand">ðŸš˜ ANSWER CAR WASH<small>Gestion professionnelle</small></div>
+  <div class="nav">
+    <button class="active" data-page="dashboard">ðŸ  Tableau de bord</button>
+    <button data-page="wash">ðŸš¿ Nouveau lavage</button>
+    <button data-page="clients">ðŸ‘¤ Clients</button>
+    <button data-page="vehicles">ðŸš— VÃ©hicules</button>
+    <button data-page="invoices">ðŸ§¾ Factures</button>
+    <button data-page="cash">ðŸ’° Caisse</button>
+    <button data-page="employees">ðŸ‘· Laveurs</button>
+    <button data-page="reports">ðŸ“Š Rapports</button>
+    <button data-page="loyalty">â­ FidÃ©litÃ©</button>
+    <button data-page="expenses">ðŸ’¸ DÃ©penses</button>
+    <button data-page="services">âš™ï¸ Services & tarifs</button>
+  </div>
+  <button class="logout" id="logout">ðŸš˜ DÃ©connexion</button>
+</aside>
+
+<main class="main">
+<header class="top"><div><h2 id="title">Tableau de bord</h2><span class="muted">Bienvenue dans Answer Car Wash</span></div><div class="car">ðŸš˜ðŸ’¦</div></header>
+
+<section id="dashboard" class="section active">
+ <div class="hero"><div><h1>Station de lavage</h1><p class="muted">GÃ©rez les lavages, clients, vÃ©hicules, caisse et employÃ©s.</p></div><div style="font-size:70px">ðŸš—ðŸ’¦</div></div>
+ <div class="cards">
+  <div class="card">ðŸ‘¤ Clients<div class="num" id="nClients">0</div></div>
+  <div class="card">ðŸš— VÃ©hicules<div class="num" id="nVehicles">0</div></div>
+  <div class="card">ðŸš¿ Lavages<div class="num" id="nWashes">0</div></div>
+  <div class="card">ðŸ’° Recettes<div class="num" id="revenue">0 FCFA</div></div>
+ </div>
+ <div class="card"><h3>Derniers lavages</h3><table class="table"><tbody id="recent"></tbody></table></div>
+</section>
+
+<section id="wash" class="section">
+ <div class="form"><h2>Nouveau lavage</h2><div class="formgrid">
+  <div class="field"><input id="client" placeholder="Nom du client *"></div>
+  <div class="field"><input id="phone" placeholder="TÃ©lÃ©phone"></div>
+  <div class="field"><input id="plate" placeholder="Immatriculation *"></div>
+  <div class="field"><select id="service"><option value="">Choisir un service</option><option>Lavage simple</option><option>Lavage complet</option><option>Nettoyage intÃ©rieur</option><option>Lavage + intÃ©rieur</option></select></div>
+  <div class="field"><input id="amount" type="number" placeholder="Montant FCFA *"></div>
+  <div class="field"><select id="payment"><option>EspÃ¨ces</option><option>MTN Money</option><option>Airtel Money</option></select></div>
+  <div class="field"><select id="washer"><option>Jean</option><option>Paul</option><option>Michel</option></select></div>
+  <div class="field"><select id="vehicleType"><option>Berline</option><option>4x4</option><option>Pickup</option><option>Taxi</option><option>Bus</option></select></div>
+ </div><div class="actions"><button class="primary" style="width:auto" id="saveWash">ðŸš¿ Enregistrer et prÃ©parer la facture</button><button class="secondary" id="clearWash">Effacer</button></div><p id="washMsg"></p></div>
+</section>
+
+<section id="clients" class="section"><div class="card"><h2>Clients</h2><table class="table"><thead><tr><th>Nom</th><th>TÃ©lÃ©phone</th></tr></thead><tbody id="clientsTable"></tbody></table></div></section>
+<section id="vehicles" class="section"><div class="card"><h2>VÃ©hicules</h2><table class="table"><thead><tr><th>Immatriculation</th><th>Client</th><th>Type</th></tr></thead><tbody id="vehiclesTable"></tbody></table></div></section>
+<section id="invoices" class="section"><div class="card"><h2>Factures</h2><p class="muted">Chaque lavage enregistrÃ© peut produire une facture imprimable.</p><button class="primary" style="width:auto" onclick="printLast()">ðŸ§¾ Imprimer la derniÃ¨re facture</button></div></section>
+<section id="cash" class="section"><div class="cards"><div class="card"><b>Recettes</b><div class="num" id="cashRevenue">0 FCFA</div></div><div class="card"><b>Nombre de lavages</b><div class="num" id="cashWashes">0</div></div></div></section>
+<section id="employees" class="section"><div class="card"><h2>Laveurs / employÃ©s</h2><table class="table"><tr><th>Nom</th><th>Fonction</th></tr><tr><td>Jean</td><td>Laveur</td></tr><tr><td>Paul</td><td>Laveur</td></tr><tr><td>Michel</td><td>Laveur</td></tr></table></div></section>
+<section id="reports" class="section"><div class="card"><h2>Rapports</h2><p>Les recettes sont calculÃ©es Ã  partir des lavages enregistrÃ©s.</p></div></section>
+<section id="loyalty" class="section"><div class="card"><h2>FidÃ©litÃ© clients</h2><p>Suivez les clients rÃ©guliers et leurs lavages.</p></div></section>
+<section id="expenses" class="section"><div class="card"><h2>DÃ©penses</h2><p>Module de suivi des dÃ©penses de la station.</p></div></section>
+<section id="services" class="section"><div class="card"><h2>Services & tarifs</h2><table class="table"><tr><th>Service</th><th>Tarif</th></tr><tr><td>Lavage simple</td><td>â€”</td></tr><tr><td>Lavage complet</td><td>â€”</td></tr><tr><td>Nettoyage intÃ©rieur</td><td>â€”</td></tr></table></div></section>
+</main></div>
+
 <script>
-let data={clients:[],vehicles:[],washes:[],invoices:[]};
-function login(){if(u.value==='admin'&&p.value==='1234'){loginBox();load()}else msg.textContent='Identifiants incorrects.'}
-function loginBox(){login.style.display='none';app.style.display='block'}
-function logout(){app.style.display='none';login.style.display='flex'}
-function show(id,b){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');title.textContent=b.textContent}
-async function load(){try{let r=await fetch('/api/data');if(r.ok){let d=await r.json();data.clients=d.clients||[];data.vehicles=d.vehicles||[];data.washes=d.washes||[];data.invoices=d.invoices||[]}}catch(e){}render()}
-async function saveWash(){let x={client:cn.value.trim(),phone:ph.value.trim(),plate:pl.value.trim(),vehicle_type:vt.value,service:se.value,washer:wa.value,amount:Number(am.value),payment:pa.value,date:new Date().toISOString()};if(!x.client||!x.plate||!x.amount){wm.textContent='Veuillez remplir les champs obligatoires.';return}try{let r=await fetch('/api/washes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(x)});if(r.ok){let d=await r.json();if(d.wash)x=d.wash}}catch(e){}data.washes.push(x);if(!data.clients.some(c=>(c.name||c.client)===x.client))data.clients.push({name:x.client,phone:x.phone});if(!data.vehicles.some(v=>(v.plate||v.immatriculation)===x.plate))data.vehicles.push({plate:x.plate,client:x.client,type:x.vehicle_type});let inv={...x,number:'FAC-'+Date.now().toString().slice(-7)};data.invoices.unshift(inv);render();openInvoice(inv);wm.textContent='Lavage enregistrÃ© avec succÃ¨s.'}
-function openInvoice(x){invoice.innerHTML='<div class="invoice-row"><b>NumÃ©ro</b><span>'+x.number+'</span></div><div class="invoice-row"><b>Date</b><span>'+new Date(x.date).toLocaleString('fr-FR')+'</span></div><div class="invoice-row"><b>Client</b><span>'+x.client+'</span></div><div class="invoice-row"><b>TÃ©lÃ©phone</b><span>'+(x.phone||'-')+'</span></div><div class="invoice-row"><b>VÃ©hicule</b><span>'+x.vehicle_type+' â€” '+x.plate+'</span></div><div class="invoice-row"><b>Laveur</b><span>'+x.washer+'</span></div><div class="invoice-row"><b>Service</b><span>'+x.service+'</span></div><div class="invoice-row"><b>Paiement</b><span>'+x.payment+'</span></div><div class="invoice-row"><b>Total</b><strong>'+Number(x.amount).toLocaleString('fr-FR')+' FCFA</strong></div>';modal.style.display='flex'}
-function clearForm(){cn.value='';ph.value='';pl.value='';am.value=5000}
-function render(){let rev=data.washes.reduce((s,x)=>s+Number(x.amount||0),0);sc.textContent=data.clients.length;sv.textContent=data.vehicles.length;sw.textContent=data.washes.length;sr.textContent=rev.toLocaleString('fr-FR')+' FCFA';cashrev.textContent=sr.textContent;cb.innerHTML='<tr><th>Nom</th><th>TÃ©lÃ©phone</th></tr>'+data.clients.map(x=>'<tr><td>'+(x.name||x.client||'-')+'</td><td>'+(x.phone||'-')+'</td></tr>').join('');vb.innerHTML='<tr><th>Immatriculation</th><th>Client</th><th>Type</th></tr>'+data.vehicles.map(x=>'<tr><td>'+(x.plate||x.immatriculation||'-')+'</td><td>'+(x.client||'-')+'</td><td>'+(x.type||x.vehicle_type||'-')+'</td></tr>').join('');ib.innerHTML=data.invoices.map(x=>'<div class="card" style="margin:8px 0"><b>'+x.number+'</b> â€” '+x.client+' â€” '+Number(x.amount).toLocaleString('fr-FR')+' FCFA</div>').join('');rep.innerHTML='<p>Lavages : <b>'+data.washes.length+'</b></p><p>Recettes : <b>'+rev.toLocaleString('fr-FR')+' FCFA</b></p>';let c={};data.washes.forEach(x=>c[x.client]=(c[x.client]||0)+1);loy.innerHTML=Object.entries(c).map(x=>'<p>â­ '+x[0]+' : '+x[1]+' lavage(s)</p>').join('')||'<p>Aucun client pour le moment.</p>'}
-</script></body></html>
+const state={clients:[],vehicles:[],washes:[],last:null};
+const $=id=>document.getElementById(id);
+
+$("loginBtn").addEventListener("click",login);
+$("pass").addEventListener("keydown",e=>{if(e.key==="Enter")login()});
+function login(){
+ const u=$("user").value.trim(),p=$("pass").value;
+ if(u==="admin"&&p==="1234"){ $("login").style.display="none";$("app").style.display="block";loadData(); }
+ else $("loginMsg").textContent="Nom d'utilisateur ou mot de passe incorrect.";
+}
+$("logout").onclick=()=>{ $("app").style.display="none";$("login").style.display="flex";$("pass").value=""; };
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>show(b.dataset.page,b));
+function show(page,btn){
+ document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));$(page).classList.add("active");
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));btn?.classList.add("active");
+ $("title").textContent=btn?btn.textContent.replace(/^[^A-Za-zÃ€-Ã¿0-9]+/,""):"Tableau de bord";
+}
+function loadData(){
+ fetch("/api/data").then(r=>r.json()).then(d=>{
+  state.clients=d.clients||[];state.vehicles=d.vehicles||[];state.washes=d.washes||[];render();
+ }).catch(()=>render());
+}
+function render(){
+ $("nClients").textContent=state.clients.length;$("nVehicles").textContent=state.vehicles.length;$("nWashes").textContent=state.washes.length;
+ const total=state.washes.reduce((s,w)=>s+Number(w.amount||0),0);$("revenue").textContent=total.toLocaleString("fr-FR")+" FCFA";$("cashRevenue").textContent=$("revenue").textContent;$("cashWashes").textContent=state.washes.length;
+ $("clientsTable").innerHTML=state.clients.map(c=>`<tr><td>${esc(c.name||c.nom||"")}</td><td>${esc(c.phone||c.telephone||"")}</td></tr>`).join("");
+ $("vehiclesTable").innerHTML=state.vehicles.map(v=>`<tr><td>${esc(v.plate||v.immatriculation||"")}</td><td>${esc(v.client||"")}</td><td>${esc(v.type||"")}</td></tr>`).join("");
+ $("recent").innerHTML=state.washes.slice(-8).reverse().map(w=>`<tr><td>${esc(w.client||"")}</td><td>${esc(w.plate||"")}</td><td>${esc(w.service||"")}</td><td>${Number(w.amount||0).toLocaleString("fr-FR")} FCFA</td></tr>`).join("");
+}
+function esc(x){return String(x).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
+$("clearWash").onclick=()=>document.querySelectorAll("#wash input").forEach(x=>x.value="");
+$("saveWash").onclick=async()=>{
+ const data={client:$("client").value.trim(),phone:$("phone").value.trim(),plate:$("plate").value.trim(),service:$("service").value,amount:Number($("amount").value),payment:$("payment").value,washer:$("washer").value,type:$("vehicleType").value};
+ if(!data.client||!data.plate||!data.amount){$("washMsg").textContent="Remplissez le client, l'immatriculation et le montant.";return}
+ try{
+  let r=await fetch("/api/washes",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
+  if(!r.ok)throw 0;
+  $("washMsg").style.color="green";$("washMsg").textContent="Lavage enregistrÃ© avec succÃ¨s.";
+  state.washes.push(data);render();state.last=data;
+ }catch(e){$("washMsg").style.color="#d33";$("washMsg").textContent="Erreur d'enregistrement. VÃ©rifiez le serveur Render."}
+};
+function printLast(){
+ if(!state.last){alert("Aucune facture disponible.");return}
+ const w=state.last,win=open("","_blank","width=700,height=700");
+ win.document.write(`<html><body style="font-family:Arial;padding:35px"><h1>ANSWER CAR WASH</h1><h2>FACTURE</h2><hr><p><b>Client:</b> ${esc(w.client)}</p><p><b>TÃ©lÃ©phone:</b> ${esc(w.phone)}</p><p><b>VÃ©hicule:</b> ${esc(w.plate)} (${esc(w.type)})</p><p><b>Service:</b> ${esc(w.service)}</p><p><b>Laveur:</b> ${esc(w.washer)}</p><p><b>Paiement:</b> ${esc(w.payment)}</p><h2>Total: ${Number(w.amount).toLocaleString("fr-FR")} FCFA</h2><hr><p>Merci pour votre confiance.</p><script>window.print()<\/script></body></html>`);win.document.close();
+}
+</script>
+</body></html>
