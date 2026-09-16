@@ -88,114 +88,210 @@ button,input,select{font:inherit}.login{min-height:100vh;display:flex;align-item
 </main></div>
 
 <script>
-const state={clients:[],vehicles:[],washes:[],last:null};
-const $=id=>document.getElementById(id);
+(function () {
+  'use strict';
 
+  const state = {clients: [], vehicles: [], washes: [], last: null};
+  const $ = (id) => document.getElementById(id);
 
-const DEFAULT_SERVICES=[
-  {name:"Lavage simple",price:0,description:""},
-  {name:"Lavage complet",price:0,description:""},
-  {name:"Nettoyage intÃ©rieur",price:0,description:""},
-  {name:"Lavage + intÃ©rieur",price:0,description:""}
-];
-const DEFAULT_TYPES=["Berline","4x4","Pickup","Taxi","Bus"];
+  const DEFAULT_SERVICES = [
+    {name:'Lavage simple', price:0},
+    {name:'Lavage complet', price:0},
+    {name:'Nettoyage intÃ©rieur', price:0},
+    {name:'Lavage + intÃ©rieur', price:0}
+  ];
+  const DEFAULT_TYPES = ['Berline','4x4','Pickup','Taxi','Bus'];
 
-function getConfig(key,defaults){
-  try{
-    const v=JSON.parse(localStorage.getItem("acw_"+key));
-    return Array.isArray(v)&&v.length?v:defaults;
-  }catch(e){return defaults}
-}
-function setConfig(key,value){
-  localStorage.setItem("acw_"+key,JSON.stringify(value));
-}
-function refreshServices(){
-  const list=getConfig("services",DEFAULT_SERVICES), sel=$("service");
-  const old=sel.value;
-  sel.innerHTML='<option value="">Choisir un service</option>'+list.map(s=>
-    `<option value="${esc(s.name)}" data-price="${Number(s.price||0)}">${esc(s.name)}${Number(s.price||0)?' â€” '+Number(s.price).toLocaleString("fr-FR")+' FCFA':''}</option>`
-  ).join("");
-  if(list.some(s=>s.name===old)) sel.value=old;
-}
-function refreshTypes(){
-  const list=getConfig("types",DEFAULT_TYPES), sel=$("vehicleType"), old=sel.value;
-  sel.innerHTML='<option value="">Choisir le type</option>'+list.map(t=>`<option>${esc(t)}</option>`).join("");
-  if(list.includes(old)) sel.value=old;
-}
-function addService(){
-  const name=prompt("Nom du service :");
-  if(!name||!name.trim()) return;
-  const priceText=prompt("Prix du service en FCFA :","0");
-  const price=Math.max(0,Number(priceText||0));
-  const services=getConfig("services",DEFAULT_SERVICES);
-  if(services.some(s=>s.name.toLowerCase()===name.trim().toLowerCase())){
-    alert("Ce service existe dÃ©jÃ ."); return;
+  function esc(x) {
+    return String(x == null ? '' : x).replace(/[&<>"']/g, function(m) {
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m];
+    });
   }
-  services.push({name:name.trim(),price,description:""});
-  setConfig("services",services); refreshServices();
-  $("service").value=name.trim();
-  if(price>0) $("amount").value=price;
-}
-function addVehicleType(){
-  const name=prompt("Nom du type de vÃ©hicule :");
-  if(!name||!name.trim()) return;
-  const types=getConfig("types",DEFAULT_TYPES);
-  if(types.some(t=>t.toLowerCase()===name.trim().toLowerCase())){
-    alert("Ce type existe dÃ©jÃ ."); return;
-  }
-  types.push(name.trim()); setConfig("types",types); refreshTypes();
-  $("vehicleType").value=name.trim();
-}
-refreshServices(); refreshTypes();
-$("addService").onclick=addService;
-$("addVehicleType").onclick=addVehicleType;
-$("service").onchange=()=>{
-  const o=$("service").selectedOptions[0];
-  if(o && Number(o.dataset.price||0)>0) $("amount").value=Number(o.dataset.price);
-};
 
-$("loginBtn").addEventListener("click",login);
-$("pass").addEventListener("keydown",e=>{if(e.key==="Enter")login()});
-function login(){
- const u=$("user").value.trim(),p=$("pass").value;
- if(u==="admin"&&p==="1234"){ $("login").style.display="none";$("app").style.display="block";loadData(); }
- else $("loginMsg").textContent="Nom d'utilisateur ou mot de passe incorrect.";
-}
-$("logout").onclick=()=>{ $("app").style.display="none";$("login").style.display="flex";$("pass").value=""; };
-document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>show(b.dataset.page,b));
-function show(page,btn){
- document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));$(page).classList.add("active");
- document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));btn?.classList.add("active");
- $("title").textContent=btn?btn.textContent.replace(/^[^A-Za-zÃ€-Ã¿0-9]+/,""):"Tableau de bord";
-}
-function loadData(){
- fetch("/api/data").then(r=>r.json()).then(d=>{
-  state.clients=d.clients||[];state.vehicles=d.vehicles||[];state.washes=d.washes||[];render();
- }).catch(()=>render());
-}
-function render(){
- $("nClients").textContent=state.clients.length;$("nVehicles").textContent=state.vehicles.length;$("nWashes").textContent=state.washes.length;
- const total=state.washes.reduce((s,w)=>s+Number(w.amount||0),0);$("revenue").textContent=total.toLocaleString("fr-FR")+" FCFA";$("cashRevenue").textContent=$("revenue").textContent;$("cashWashes").textContent=state.washes.length;
- $("clientsTable").innerHTML=state.clients.map(c=>`<tr><td>${esc(c.name||c.nom||"")}</td><td>${esc(c.phone||c.telephone||"")}</td></tr>`).join("");
- $("vehiclesTable").innerHTML=state.vehicles.map(v=>`<tr><td>${esc(v.plate||v.immatriculation||"")}</td><td>${esc(v.client||"")}</td><td>${esc(v.type||"")}</td></tr>`).join("");
- $("recent").innerHTML=state.washes.slice(-8).reverse().map(w=>`<tr><td>${esc(w.client||"")}</td><td>${esc(w.plate||"")}</td><td>${esc(w.service||"")}</td><td>${Number(w.amount||0).toLocaleString("fr-FR")} FCFA</td></tr>`).join("");
-}
-function esc(x){return String(x).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
-$("clearWash").onclick=()=>document.querySelectorAll("#wash input").forEach(x=>x.value="");
-$("saveWash").onclick=async()=>{
- const data={client:$("client").value.trim(),phone:$("phone").value.trim(),plate:$("plate").value.trim(),service:$("service").value,amount:Number($("amount").value),payment:$("payment").value,washer:$("washer").value,type:$("vehicleType").value};
- if(!data.client||!data.plate||!data.amount){$("washMsg").textContent="Remplissez le client, l'immatriculation et le montant.";return}
- try{
-  let r=await fetch("/api/washes",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
-  if(!r.ok)throw 0;
-  $("washMsg").style.color="green";$("washMsg").textContent="Lavage enregistrÃ© avec succÃ¨s.";
-  state.washes.push(data);render();state.last=data;
- }catch(e){$("washMsg").style.color="#d33";$("washMsg").textContent="Erreur d'enregistrement. VÃ©rifiez le serveur Render."}
-};
-function printLast(){
- if(!state.last){alert("Aucune facture disponible.");return}
- const w=state.last,win=open("","_blank","width=700,height=700");
- win.document.write(`<html><body style="font-family:Arial;padding:35px"><h1>ANSWER CAR WASH</h1><h2>FACTURE</h2><hr><p><b>Client:</b> ${esc(w.client)}</p><p><b>TÃ©lÃ©phone:</b> ${esc(w.phone)}</p><p><b>VÃ©hicule:</b> ${esc(w.plate)} (${esc(w.type)})</p><p><b>Service:</b> ${esc(w.service)}</p><p><b>Laveur:</b> ${esc(w.washer)}</p><p><b>Paiement:</b> ${esc(w.payment)}</p><h2>Total: ${Number(w.amount).toLocaleString("fr-FR")} FCFA</h2><hr><p>Merci pour votre confiance.</p><script>window.print()<\/script></body></html>`);win.document.close();
-}
+  function getConfig(key, defaults) {
+    try {
+      const raw = localStorage.getItem('acw_' + key);
+      if (!raw) return defaults.slice ? defaults.slice() : defaults;
+      const value = JSON.parse(raw);
+      return Array.isArray(value) && value.length ? value : (defaults.slice ? defaults.slice() : defaults);
+    } catch (e) {
+      return defaults.slice ? defaults.slice() : defaults;
+    }
+  }
+
+  function setConfig(key, value) {
+    try { localStorage.setItem('acw_' + key, JSON.stringify(value)); } catch (e) {}
+  }
+
+  function refreshServices() {
+    const sel = $('service');
+    if (!sel) return;
+    const list = getConfig('services', DEFAULT_SERVICES);
+    const old = sel.value;
+    sel.innerHTML = '<option value="">Choisir un service</option>' + list.map(function(s) {
+      const price = Number(s.price || 0);
+      return '<option value="' + esc(s.name) + '" data-price="' + price + '">' + esc(s.name) + (price ? ' â€” ' + price.toLocaleString('fr-FR') + ' FCFA' : '') + '</option>';
+    }).join('');
+    if (list.some(function(s){ return s.name === old; })) sel.value = old;
+  }
+
+  function refreshTypes() {
+    const sel = $('vehicleType');
+    if (!sel) return;
+    const list = getConfig('types', DEFAULT_TYPES);
+    const old = sel.value;
+    sel.innerHTML = '<option value="">Choisir le type</option>' + list.map(function(t){
+      return '<option value="' + esc(t) + '">' + esc(t) + '</option>';
+    }).join('');
+    if (list.indexOf(old) !== -1) sel.value = old;
+  }
+
+  function addService() {
+    const name = window.prompt('Nom du service :');
+    if (!name || !name.trim()) return;
+    const priceText = window.prompt('Prix du service en FCFA :', '0');
+    if (priceText === null) return;
+    const price = Math.max(0, Number(priceText) || 0);
+    const services = getConfig('services', DEFAULT_SERVICES);
+    if (services.some(function(s){ return s.name.toLowerCase() === name.trim().toLowerCase(); })) {
+      window.alert('Ce service existe dÃ©jÃ .'); return;
+    }
+    services.push({name:name.trim(), price:price});
+    setConfig('services', services);
+    refreshServices();
+    $('service').value = name.trim();
+    if (price > 0) $('amount').value = price;
+  }
+
+  function addVehicleType() {
+    const name = window.prompt('Nom du type de vÃ©hicule :');
+    if (!name || !name.trim()) return;
+    const types = getConfig('types', DEFAULT_TYPES);
+    if (types.some(function(t){ return t.toLowerCase() === name.trim().toLowerCase(); })) {
+      window.alert('Ce type existe dÃ©jÃ .'); return;
+    }
+    types.push(name.trim());
+    setConfig('types', types);
+    refreshTypes();
+    $('vehicleType').value = name.trim();
+  }
+
+  function loadData() {
+    fetch('/api/data', {cache:'no-store'})
+      .then(function(r){ if (!r.ok) throw new Error('API'); return r.json(); })
+      .then(function(d){
+        state.clients = d.clients || [];
+        state.vehicles = d.vehicles || [];
+        state.washes = d.washes || [];
+        render();
+      })
+      .catch(function(){ render(); });
+  }
+
+  function render() {
+    if ($('nClients')) $('nClients').textContent = state.clients.length;
+    if ($('nVehicles')) $('nVehicles').textContent = state.vehicles.length;
+    if ($('nWashes')) $('nWashes').textContent = state.washes.length;
+    const total = state.washes.reduce(function(sum,w){ return sum + Number(w.amount || 0); }, 0);
+    const totalText = total.toLocaleString('fr-FR') + ' FCFA';
+    if ($('revenue')) $('revenue').textContent = totalText;
+    if ($('cashRevenue')) $('cashRevenue').textContent = totalText;
+    if ($('cashWashes')) $('cashWashes').textContent = state.washes.length;
+    if ($('clientsTable')) $('clientsTable').innerHTML = state.clients.map(function(c){
+      return '<tr><td>' + esc(c.name || c.nom || '') + '</td><td>' + esc(c.phone || c.telephone || '') + '</td></tr>';
+    }).join('');
+    if ($('vehiclesTable')) $('vehiclesTable').innerHTML = state.vehicles.map(function(v){
+      return '<tr><td>' + esc(v.plate || v.immatriculation || '') + '</td><td>' + esc(v.client || '') + '</td><td>' + esc(v.type || '') + '</td></tr>';
+    }).join('');
+    if ($('recent')) $('recent').innerHTML = state.washes.slice(-8).reverse().map(function(w){
+      return '<tr><td>' + esc(w.client || '') + '</td><td>' + esc(w.plate || '') + '</td><td>' + esc(w.service || '') + '</td><td>' + Number(w.amount || 0).toLocaleString('fr-FR') + ' FCFA</td></tr>';
+    }).join('');
+  }
+
+  function login() {
+    const user = ($('user') ? $('user').value : '').trim();
+    const pass = $('pass') ? $('pass').value : '';
+    const msg = $('loginMsg');
+    if (user === 'admin' && pass === '1234') {
+      if (msg) msg.textContent = '';
+      $('login').style.display = 'none';
+      $('app').style.display = 'block';
+      loadData();
+    } else {
+      if (msg) msg.textContent = 'Nom dâ€™utilisateur ou mot de passe incorrect.';
+    }
+  }
+
+  function show(page, btn) {
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+    const section = $(page);
+    if (section) section.classList.add('active');
+    document.querySelectorAll('.nav button').forEach(function(b){ b.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+    if ($('title')) $('title').textContent = btn ? btn.textContent.replace(/^[^A-Za-zÃ€-Ã¿0-9]+/, '') : 'Tableau de bord';
+  }
+
+  function printLast() {
+    if (!state.last) { window.alert('Aucune facture disponible.'); return; }
+    const w = state.last;
+    const win = window.open('', '_blank', 'width=700,height=700');
+    if (!win) { window.alert('Autorisez les fenÃªtres pop-up pour imprimer la facture.'); return; }
+    win.document.write('<html><body style="font-family:Arial;padding:35px"><h1>ANSWER CAR WASH</h1><h2>FACTURE</h2><hr>' +
+      '<p><b>Client:</b> '+esc(w.client)+'</p><p><b>TÃ©lÃ©phone:</b> '+esc(w.phone)+'</p>' +
+      '<p><b>VÃ©hicule:</b> '+esc(w.plate)+' ('+esc(w.type)+')</p><p><b>Service:</b> '+esc(w.service)+'</p>' +
+      '<p><b>Laveur:</b> '+esc(w.washer)+'</p><p><b>Paiement:</b> '+esc(w.payment)+'</p>' +
+      '<h2>Total: '+Number(w.amount).toLocaleString('fr-FR')+' FCFA</h2><hr><p>Merci pour votre confiance.</p>' +
+      '<script>window.print()<\/script></body></html>');
+    win.document.close();
+  }
+
+  window.printLast = printLast;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    refreshServices();
+    refreshTypes();
+
+    if ($('loginBtn')) $('loginBtn').addEventListener('click', login);
+    if ($('pass')) $('pass').addEventListener('keydown', function(e){ if (e.key === 'Enter') login(); });
+    if ($('addService')) $('addService').addEventListener('click', addService);
+    if ($('addVehicleType')) $('addVehicleType').addEventListener('click', addVehicleType);
+    if ($('service')) $('service').addEventListener('change', function(){
+      const o = $('service').selectedOptions[0];
+      if (o && Number(o.dataset.price || 0) > 0) $('amount').value = Number(o.dataset.price);
+    });
+    if ($('clearWash')) $('clearWash').addEventListener('click', function(){
+      document.querySelectorAll('#wash input').forEach(function(x){ x.value = ''; });
+      if ($('service')) $('service').value = '';
+      if ($('vehicleType')) $('vehicleType').value = '';
+      if ($('washMsg')) $('washMsg').textContent = '';
+    });
+    if ($('logout')) $('logout').addEventListener('click', function(){
+      $('app').style.display = 'none'; $('login').style.display = 'flex'; $('pass').value = '';
+    });
+
+    document.querySelectorAll('.nav button').forEach(function(b){
+      b.addEventListener('click', function(){ show(b.dataset.page, b); });
+    });
+
+    if ($('saveWash')) $('saveWash').addEventListener('click', async function(){
+      const data = {
+        client: $('client').value.trim(), phone: $('phone').value.trim(), plate: $('plate').value.trim(),
+        service: $('service').value, amount: Number($('amount').value), payment: $('payment').value,
+        washer: $('washer').value.trim(), type: $('vehicleType').value
+      };
+      if (!data.client || !data.plate || !data.amount) {
+        $('washMsg').style.color = '#d33'; $('washMsg').textContent = 'Remplissez le client, lâ€™immatriculation et le montant.'; return;
+      }
+      try {
+        const r = await fetch('/api/washes', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)});
+        if (!r.ok) throw new Error('save');
+        $('washMsg').style.color = 'green'; $('washMsg').textContent = 'Lavage enregistrÃ© avec succÃ¨s.';
+        state.washes.push(data); state.last = data; render();
+      } catch(e) {
+        $('washMsg').style.color = '#d33'; $('washMsg').textContent = 'Erreur dâ€™enregistrement. VÃ©rifiez le serveur Render.';
+      }
+    });
+  });
+})();
 </script>
 </body></html>
